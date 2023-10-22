@@ -6,6 +6,8 @@ import Materialien from "@/pages/Materialien.vue";
 import Produkte from "@/pages/Produkte.vue";
 import Material from "@/pages/Material.vue";
 import Produkt from "@/pages/Produkt.vue";
+import Attribut from "@/pages/Attribut.vue";
+import Attribute from "@/pages/Attribute.vue";
 
 const routes = [
     {
@@ -35,6 +37,14 @@ const routes = [
     {
         path: '/produkt/:id?',
         component: Produkt
+    },
+    {
+        path: '/attribute',
+        component: Attribute
+    },
+    {
+        path: '/attribut/:id?',
+        component: Attribut
     },
 ]
 

@@ -4,7 +4,8 @@
       <h4>Produktangaben anpassen</h4>
       <div class="d-row">
         <div class="form-floating">
-          <input readonly placeholder="Name" class="form-control" id="prodName" type="text" v-model="schrittProdukt.produktId" required>
+          <input readonly placeholder="Name" class="form-control" id="prodName" type="text"
+            v-model="schrittProdukt.produktId" required>
           <label for="prodName">Name</label>
         </div>
         <div class="form-floating">
@@ -28,9 +29,9 @@
 </template>
 
 <script>
-import {defineComponent, onMounted, reactive, ref, watch} from "vue";
+import { defineComponent, onMounted, reactive, ref, watch } from "vue";
 import PouchDB from "pouchdb-browser";
-import {useRoute} from "vue-router";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   emits: ['closeDialog'],
@@ -41,14 +42,17 @@ export default defineComponent({
     },
     produkt: {
       type: String,
-      required: true
+      required: true,
+      //immediate: true,
+     
     },
     isOpen: {
       type: Boolean,
       required: true
     }
   },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
+    console.log("Von ProductSelection empfangenes Produkt im SchrittProduktDialog:", props.produkt);
     const $route = useRoute()
     const db = new PouchDB("Rezepte")
     let rezept
@@ -59,19 +63,34 @@ export default defineComponent({
       gewicht: 0
     })
     watch(
-        () => props.isOpen,
-        async (newVal, oldValue) => {
-          if (newVal) {
-            await updateData()
-          }
+      () => props.isOpen,
+      async (newVal, oldValue) => {
+        if (newVal) {
+          await updateData()
         }
+      }
     )
-    async function updateData () {
+    async function updateData() {
       try {
         rezept = await db.get($route.params.id);
+        console.log("props.schritt : ", props.schritt);
+        console.log(" rezept.anleitung.schritte : ", rezept.anleitung.schritte);
+        console.log(" props.schritt - 1 (Index): ", props.schritt - 1);
+
+
         schritt = rezept.anleitung.schritte[props.schritt - 1]
+
+        console.log("Schritt: ", schritt);
+
+
+
         if (schritt) {
+          console.log("schritt.produkte: ", schritt.produkte);
+          console.log("props.produkt: ", props.produkt);
+         
           const sProdukt = schritt.produkte.find(p => p.produktId === props.produkt)
+
+          console.log("sProdukt : ", sProdukt);
           if (sProdukt) {
             schrittProdukt.produktId = sProdukt.produktId
             schrittProdukt.preis = sProdukt.preis
@@ -80,7 +99,7 @@ export default defineComponent({
             schrittProdukt.produktId = props.produkt
             schrittProdukt.preis = 0
             schrittProdukt.gewicht = 0
-          }
+          } 
         } else {
           console.error("Schritt nicht gefunden", props.schritt - 1)
           emit('closeDialog')

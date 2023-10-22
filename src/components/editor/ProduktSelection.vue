@@ -42,7 +42,8 @@ export default {
     }).on('error', function (err) {
       console.log("Produkte Sync Error")
     });
-    const selection = new ref('')
+    const selection = ref('')
+    console.log("selection: ", selection);
     const produkte = reactive([])
     const state = reactive({
       allPro: []
@@ -98,6 +99,8 @@ export default {
       closeSchrittProduktDialog,
       closeNewProduktDialog,
       addProdukt() {
+       
+        console.log("Ausgewähltes Produkt:", selection.value); 
         if (!selection.value) {
           // neues Produkt anlegen
           newProduktDialogOpen.value = true
@@ -106,6 +109,8 @@ export default {
           schrittProduktDialogOpen.value = true
         }
         // schritt.produkte.push(selection)
+        console.log("Selection nach addProdukt : ", selection.value);
+       
       },
     }
   }

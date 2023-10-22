@@ -40,6 +40,7 @@ export default {
       console.log("Materialien Sync Error")
     });
     const selection = new ref('')
+    console.log("selection : ", selection);
     const materialien = reactive([])
     const state = reactive({
       allMat: []
@@ -81,6 +82,7 @@ export default {
       newMaterialDialogOpen,
       closeNewMaterialDialog,
       addMaterial() {
+        console.log("Selection vor addMaterial : ", selection.value);
         if (!selection.value) {
           // neues Material anlegen
           newMaterialDialogOpen.value = true
@@ -90,8 +92,10 @@ export default {
           //props.schritt.materialien = props.schritt.materialien.filter(m => m)
         }
         selection.value = ''
+        
         updateMaterialSelection()
         emit('save')
+        console.log("Selection nach addMaterial: ", selection.value);
       }
     }
   }
